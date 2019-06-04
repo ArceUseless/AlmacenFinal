@@ -186,19 +186,12 @@ public class Producto{
     setTipoDeIva (iva);
   }
   
+
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
     result = prime * result + codigo;
-    result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
-    long temp;
-    temp = Double.doubleToLongBits(precioCompra);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(precioVenta);
-    result = prime * result + (int) (temp ^ (temp >>> 32));
-    result = prime * result + stock;
-    result = prime * result + ((tipoDeIva == null) ? 0 : tipoDeIva.hashCode());
     return result;
   }
 
@@ -212,19 +205,6 @@ public class Producto{
       return false;
     Producto other = (Producto) obj;
     if (codigo != other.codigo)
-      return false;
-    if (descripcion == null) {
-      if (other.descripcion != null)
-        return false;
-    } else if (!descripcion.equals(other.descripcion))
-      return false;
-    if (Double.doubleToLongBits(precioCompra) != Double.doubleToLongBits(other.precioCompra))
-      return false;
-    if (Double.doubleToLongBits(precioVenta) != Double.doubleToLongBits(other.precioVenta))
-      return false;
-    if (stock != other.stock)
-      return false;
-    if (tipoDeIva != other.tipoDeIva)
       return false;
     return true;
   }

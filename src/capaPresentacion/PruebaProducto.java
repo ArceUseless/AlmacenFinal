@@ -11,19 +11,31 @@ import capaNegocio.*;
 import utiles.*;
 
 public class PruebaProducto {
-  
+
   /**
    * Programa principal
+   * 
    * @param args
    */
-  public static void main( String[] args ){
-   
+  public static void main(String[] args) {
+
     Almacen almacen = new Almacen();
     Menu menuIva = new Menu("Elige uno de los siguientes tipos de IVA:",
         new String[] { "GENERAL", "REDUCIDO", "SUPER REDUCIDO" });
     Menu menuGeneral = new Menu("Elige una de las opciones del almacén:", new String[] { "Mostrar Almacén", "Alta",
         "Baja", "Modificación", "Entrada de Mercancía", "Salida de Mercancía", "Salir" });
 
+    try {
+      almacen.anadirArticulo("zumo", 1, 2, 300, Iva.GENERAL);
+      almacen.anadirArticulo("cerveza", 1, 2, 20, Iva.GENERAL);
+      almacen.anadirArticulo("agua", 1, 2, 300, Iva.GENERAL);
+      almacen.anadirArticulo("cc", 1, 2, 300, Iva.GENERAL);
+      almacen.anadirArticulo("fanta", 1, 2, 300, Iva.SUPER_REDUCIDO);
+      almacen.anadirArticulo("zusdfasdfsamo", 1, 2, 30, Iva.GENERAL);
+    } catch (IvaInvalidoException | StockNegativoException | PrecioDeCompraNegativoException
+        | PrecioDeVentaNegativoException e) {
+      // No entrará
+    }
     int opcion = 0;
     // Menu
     do {
@@ -67,126 +79,81 @@ public class PruebaProducto {
       }
     } while (opcion != 7);
   }
+
   public static void mostrarAlmacen(Almacen almacen) {
-    System.out.println(almacen); 
+    System.out.println(almacen);
   }
-  
-  private static void altaProducto(Almacen almacen, Menu menuIva)  {
+
+  private static void altaProducto(Almacen almacen, Menu menuIva) {
     try {
       System.out.println("\n======DAR DE ALTA PRODUCTO======");
-      
-      String d = Teclado.leerCadena("Introduzca la descripción del producto.");
-  
-      double pC = Teclado.leerDecimal("Introduzca el precio de compra del producto.");
-  
-      double pV = Teclado.leerDecimal("Introduzca el precio de venta del producto.");
-      
-      int s = Teclado.leerEntero("Introduzca el stock del producto.");
-  
-      Iva iva = gestionaIva(menuIva.gestionMenu());
-      
-      almacen.anadirArticulo(d, pC , pV, s, iva);
-    } catch (NumberFormatException nfe) {
-        System.err.println("ERROR: Formato numérico incorrecto.");
-    } catch (EnteroNoValidoException enve) {
-      System.err.println("ERROR: Entero no válido.");
-    }catch (IvaInvalidoException | StockNegativoException | PrecioDeCompraNegativoException | PrecioDeVentaNegativoException err) {
-      System.err.println(err.getMessage());
-      return;
-    } catch (Exception e) {
-      System.out.println("ERROR: Entrada incorrecta.");
-      return;
-    } 
+      almacen.anadirArticulo(Teclado.leerCadena("Introduzca la descripción del producto."), Teclado.leerDecimal("Introduzca el precio de compra del producto."), Teclado.leerDecimal("Introduzca el precio de venta del producto."), Teclado.leerEntero("Introduzca el stock del producto."), gestionaIva(menuIva.gestionMenu()));
+    } catch (NumberFormatException | EnteroNoValidoException | IvaInvalidoException | StockNegativoException | PrecioDeCompraNegativoException | PrecioDeVentaNegativoException e) {
+      System.err.println(e.getMessage());
+    }
   }
-  
+
   private static void bajaProducto(Almacen almacen) {
     System.out.println("\n======DAR DE BAJA PRODUCTO======");
     try {
-      int codigo = Teclado.leerEntero("Introduzca el código del producto a eliminar");
-      almacen.compruebaCodigo(codigo);
-      almacen.retirarArticulo(codigo);
-    } catch (ProductoNoEncontradoException pnee) {
-      System.err.println(pnee.getMessage());
-      return;
+      if (!almacen.retirarArticulo(Teclado.leerEntero("Introduzca el código del producto a eliminar"))) {
+        System.err.println("No se ha encontrado el producto.");
+      }
     } catch (EnteroNoValidoException enve) {
       System.err.println(enve.getMessage());
       return;
     }
+    
   }
-  
+
   private static void modificaProducto(Almacen almacen, Menu menuIva) {
     System.out.println("\n======MODIFICAR EL PRODUCTO======");
     try {
-      int codigo = Teclado.leerEntero("Introduzca el código del producto: ");
-      almacen.compruebaCodigo(codigo);
-      String d = Teclado.leerCadena("Nueva descripción: ");
-      double pC = Teclado.leerDecimal("Nuevo precio de compra: ");
-      double pV = Teclado.leerDecimal("Nuevo precio de venta: ");
-      int s = Teclado.leerEntero("Nuevo stock: ");
-      Iva iva = gestionaIva(menuIva.gestionMenu());
-      
-      almacen.modificaProducto(codigo,d, pC, pV, s, iva); 
-    } catch (IvaInvalidoException | StockNegativoException | PrecioDeCompraNegativoException | PrecioDeVentaNegativoException err) {
+      int codigo=Teclado.leerEntero("Introduzca el código del producto: ");
+      System.out.println(almacen.get(codigo));
+      almacen.modificaProducto(codigo,
+          Teclado.leerCadena("Nueva descripción: "), Teclado.leerDecimal("Nuevo precio de compra: "), Teclado.leerDecimal("Nuevo precio de venta: "), Teclado.leerEntero("Nuevo stock: "), gestionaIva(menuIva.gestionMenu()));
+    } catch (IvaInvalidoException | StockNegativoException | PrecioDeCompraNegativoException
+        | PrecioDeVentaNegativoException |ProductoNoEncontradoException | NumberFormatException | EnteroNoValidoException err) {
       System.err.println(err.getMessage());
-      return;
-    } catch (ProductoNoEncontradoException pnee) {
-      System.err.println(pnee.getMessage());
-      return;
-    } catch (Exception e) {
-      System.out.println("ERROR: Entrada incorrecta.");
-      return;
-    } 
+    }
   }
-  
+
   private static void entradaMercancia(Almacen almacen) {
     System.out.println("\n======ENTRADA DE MERCANC�A======");
     try {
       int codigo = Teclado.leerEntero("Introduzca el código del producto");
-      almacen.compruebaCodigo(codigo);
-      almacen.incrementarExistencias(codigo,Teclado.leerEntero("Introduzca la cantidad que desea sumar al stock"));
-    } catch (ProductoNoEncontradoException pnee) {
-      System.err.println(pnee.getMessage());
+      System.out.println(almacen.get(codigo));
+      almacen.incrementarExistencias(codigo, Teclado.leerEntero("Introduzca la cantidad que desea sumar al stock"));
+    } catch (ProductoNoEncontradoException | ArgumentoNegativoException | EnteroNoValidoException | StockNegativoException | ArrayIndexOutOfBoundsException e) {
+      System.err.println(e.getMessage());
       return;
-    } catch (ArgumentoNegativoException ane) {
-      System.err.println(ane.getMessage());
-      return;
-    } catch (Exception e) {
-      System.out.println("ERROR: entrada incorrecta.");
-      return;
-    }
+    } 
   }
-  
+
   private static void salidaMercancia(Almacen almacen) {
-    System.out.println("\n======SALIDA DE MERCANC�A======");   
+    System.out.println("\n======SALIDA DE MERCANC�A======");
     try {
       int codigo = Teclado.leerEntero("Introduzca el código del producto");
-      almacen.compruebaCodigo(codigo);
-      almacen.reducirExistencias(codigo ,Teclado.leerEntero("Introduzca la cantidad que desea restar al stock"));
-    } catch (ProductoNoEncontradoException pnee) {
-      System.err.println(pnee.getMessage());
+      System.out.println(almacen.get(codigo));
+      almacen.reducirExistencias(codigo, Teclado.leerEntero("Introduzca la cantidad que desea restar al stock"));
+    } catch (ProductoNoEncontradoException | ArgumentoNegativoException | EnteroNoValidoException | StockNegativoException | ArrayIndexOutOfBoundsException e) {
+      System.err.println(e.getMessage());
       return;
-    } catch (ArgumentoNegativoException ane) {
-      System.err.println(ane.getMessage());
-      return;
-    } catch(StockNegativoException sne) {
-      System.err.println(sne.getMessage());
-    } catch (Exception e) {
-      System.out.println("ERROR: entrada incorrecta.");
-      return;
-    }
+    } 
   }
 
   public static Iva gestionaIva(int opcion) {
-    switch(opcion) {
-      case 1:
-        return Iva.GENERAL;
-      case 2:
-        return Iva.REDUCIDO;
-      case 3:
-        return Iva.SUPER_REDUCIDO;
-      default:
-        return null;
-          
+    switch (opcion) {
+    case 1:
+      return Iva.GENERAL;
+    case 2:
+      return Iva.REDUCIDO;
+    case 3:
+      return Iva.SUPER_REDUCIDO;
+    default:
+      return null;
+
     }
   }
 }

@@ -28,8 +28,8 @@ public class Almacen{
    * @param c Codigo del producto
    * @see anadirArticulo
    */
-  public void retirarArticulo( int codigo )throws ProductoNoEncontradoException{
-    almacen.remove(new Producto(codigo));
+  public boolean retirarArticulo( int codigo ) {
+    return almacen.remove(new Producto(codigo));
   }
   /**
    * Incrementa el stock del producto
@@ -39,12 +39,24 @@ public class Almacen{
    * @see reducirExistencias
    */
   
-  public void incrementarExistencias( int cantidad, int codigo ) throws ArgumentoNegativoException, StockNegativoException, ProductoNoEncontradoException{
+  public void incrementarExistencias( int codigo, int cantidad ) throws ArgumentoNegativoException, StockNegativoException, ProductoNoEncontradoException{
     if( cantidad < 0){
       throw new ArgumentoNegativoException("ERROR: El argumento debe ser positivo.");
     }else {
-      Producto productoAux = this.almacen.get(this.almacen.indexOf(new Producto(codigo)));
-      productoAux.incrementarStock(cantidad);
+      get(codigo).incrementarStock(cantidad);
+    }
+  }
+/**
+ * 
+ * @param codigo
+ * @return
+ * @throws ProductoNoEncontradoException
+ */
+  public Producto get(int codigo) throws ProductoNoEncontradoException {
+    try {
+      return this.almacen.get(this.almacen.indexOf(new Producto(codigo)));
+    } catch (ArrayIndexOutOfBoundsException e) {
+        throw new ProductoNoEncontradoException("ERROR: No se ha encontrado el producto");   
     }
   }
   /**
@@ -54,27 +66,21 @@ public class Almacen{
    * @throws ArgumentoNegativoException 
    * @see incrementarExistencias
    */
-  public void reducirExistencias( int cantidad, int codigo ) throws StockNegativoException, ArgumentoNegativoException, ProductoNoEncontradoException{ 
+  public void reducirExistencias( int codigo, int cantidad ) throws StockNegativoException, ArgumentoNegativoException, ProductoNoEncontradoException{ 
     if( cantidad < 0){
       throw new ArgumentoNegativoException("ERROR: El argumento debe ser positivo.");
     }else {
-      Producto productoAux = this.almacen.get(this.almacen.indexOf(new Producto(codigo)));
-      if(productoAux.getStock()-cantidad <0) {
+      if(get(codigo).getStock()-cantidad <0) {
         throw new StockNegativoException("ERROR: El stock pasaría a ser negativo.");
       }
-      productoAux.reducirStock(cantidad);
+      get(codigo).reducirStock(cantidad);
     }
   }
   
   public void modificaProducto(int codigo, String d, double pC, double pV, int s, Iva iva) throws IvaInvalidoException, StockNegativoException, PrecioDeCompraNegativoException, PrecioDeVentaNegativoException, ProductoNoEncontradoException {
-    this.almacen.get(this.almacen.indexOf(new Producto(codigo))).modificarProducto(d, pC, pV, s, iva);
+    get(codigo).modificarProducto(d, pC, pV, s, iva);
   }
   
-  public void compruebaCodigo(int codigo) throws ProductoNoEncontradoException {
-    if(this.almacen.contains(new Producto(codigo))== false){
-      throw new ProductoNoEncontradoException("ERROR: Producto no encontrado.");
-    }
-  }
   /**
    * método toString de la clase
    * @return String
