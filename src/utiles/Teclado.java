@@ -25,7 +25,8 @@ public class Teclado {
   /**
    * Lee un carácter del teclado
    * 
-   * @param msj: mensaje mostrado al usuario
+   * @param msj:
+   *          mensaje mostrado al usuario
    * @return carácter introducido por el usuario
    */
   public static char leerCaracter(String mensaje) {
@@ -36,7 +37,8 @@ public class Teclado {
   /**
    * Lee una cadena del teclado
    * 
-   * @param msj: mensaje mostrado al usuario
+   * @param msj:
+   *          mensaje mostrado al usuario
    * @return cadena introducida por el usuario
    */
   public static String leerCadena(String msj) {
@@ -59,25 +61,27 @@ public class Teclado {
    * 
    * 
    * @return entero introducido por el usuario
-   * @throws NumberFormatException
-   * @throws EnteroNoValidoException
+   * 
    */
-  public static int leerEntero() throws EnteroNoValidoException {
-    try {
-      return Integer.parseInt(leerCadena().trim()); 
-    } catch (NumberFormatException e) {
-      throw new EnteroNoValidoException("Introduce un entero.");
-    }
+  public static int leerEntero() {
+    do {
+      try {
+        return Integer.parseInt(leerCadena().trim());
+      } catch (NumberFormatException  e) {
+        System.err.println("Introduce un entero.");
+      }
+    } while (true);
   }
 
   /**
    * Lee una entero del teclado
    * 
-   * @param msj: mensaje mostrado al usuario
+   * @param msj:
+   *          mensaje mostrado al usuario
    * @return entero introducida por el usuario
-   * @throws NumberFormatException
+   *
    */
-  public static int leerEntero(String msj) throws NumberFormatException, EnteroNoValidoException {
+  public static int leerEntero(String msj){
     System.out.println(msj);
     return leerEntero();
   }
@@ -86,24 +90,25 @@ public class Teclado {
    * Lee un decimal del teclado
    * 
    * @return decimal introducido por el usuario
-   * @throws NumberFormatException
    */
-  public static double leerDecimal() throws NumberFormatException {
-    try {
-      return Double.parseDouble(leerCadena().trim());
-    } catch (InputMismatchException e) {
-      throw new NumberFormatException("Introduzca un número decimal.");
-    }
+  public static double leerDecimal() {
+    do {
+      try {
+        return Double.parseDouble(leerCadena().trim());
+      } catch (InputMismatchException e) {
+        System.err.println("ERROR: Decimal no válido.");
+      } 
+    } while (true);
   }
 
   /**
    * Lee una decimal del teclado
    * 
-   * @param msj: mensaje mostrado al usuario
+   * @param msj:
+   *          mensaje mostrado al usuario
    * @return decimal introducida por el usuario
-   * @throws NumberFormatException
    */
-  public static double leerDecimal(String msj) throws NumberFormatException {
+  public static double leerDecimal(String msj) {
     System.out.println(msj);
     return leerDecimal();
   }

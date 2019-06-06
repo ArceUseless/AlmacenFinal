@@ -19,7 +19,7 @@ public class Almacen{
    * @param p Objeto producto
    * @see retirarArticulo
    */
-  public void anadirArticulo( String d, double pC, double pV, int s, Iva iva) throws IvaInvalidoException, StockNegativoException, PrecioDeCompraNegativoException, PrecioDeVentaNegativoException {
+  public void anadir( String d, double pC, double pV, int s, Iva iva) throws IvaInvalidoException, StockNegativoException, PrecioDeCompraNegativoException, PrecioDeVentaNegativoException {
     almacen.add(new Producto(d, pC, pV, s, iva));
     }
   
@@ -28,7 +28,7 @@ public class Almacen{
    * @param c Codigo del producto
    * @see anadirArticulo
    */
-  public boolean retirarArticulo( int codigo ) {
+  public boolean eliminar( int codigo ) {
     return almacen.remove(new Producto(codigo));
   }
   /**
@@ -39,12 +39,13 @@ public class Almacen{
    * @see reducirExistencias
    */
   
-  public void incrementarExistencias( int codigo, int cantidad ) throws ArgumentoNegativoException, StockNegativoException, ProductoNoEncontradoException{
+  public void entrada( int codigo, int cantidad ) throws ArgumentoNegativoException, StockNegativoException, ProductoNoEncontradoException{
     if( cantidad < 0){
-      throw new ArgumentoNegativoException("ERROR: El argumento debe ser positivo.");
-    }else {
-      get(codigo).incrementarStock(cantidad);
+      throw new ArgumentoNegativoException("ERROR: La cantidad debe ser positiva.");
     }
+    
+    get(codigo).incrementarStock(cantidad);
+    
   }
 /**
  * 
@@ -64,21 +65,16 @@ public class Almacen{
    * @param c Cantidad que se resta al stock
    * @throws StockNegativoException 
    * @throws ArgumentoNegativoException 
-   * @see incrementarExistencias
    */
-  public void reducirExistencias( int codigo, int cantidad ) throws StockNegativoException, ArgumentoNegativoException, ProductoNoEncontradoException{ 
+  public void salida( int codigo, int cantidad ) throws StockNegativoException, ArgumentoNegativoException, ProductoNoEncontradoException{ 
     if( cantidad < 0){
-      throw new ArgumentoNegativoException("ERROR: El argumento debe ser positivo.");
-    }else {
-      if(get(codigo).getStock()-cantidad <0) {
-        throw new StockNegativoException("ERROR: El stock pasaría a ser negativo.");
-      }
-      get(codigo).reducirStock(cantidad);
+      throw new ArgumentoNegativoException("ERROR: La cantidad debe ser positiva.");
     }
+    get(codigo).reducirStock(cantidad);
   }
   
-  public void modificaProducto(int codigo, String d, double pC, double pV, int s, Iva iva) throws IvaInvalidoException, StockNegativoException, PrecioDeCompraNegativoException, PrecioDeVentaNegativoException, ProductoNoEncontradoException {
-    get(codigo).modificarProducto(d, pC, pV, s, iva);
+  public void set(int codigo, String d, double pC, double pV, int s, Iva iva) throws IvaInvalidoException, StockNegativoException, PrecioDeCompraNegativoException, PrecioDeVentaNegativoException, ProductoNoEncontradoException {
+    get(codigo).set(d, pC, pV, s, iva);
   }
   
   /**

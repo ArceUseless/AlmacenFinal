@@ -3,13 +3,13 @@ package utiles;
 import java.util.Arrays;
 
 public class Menu {
-  
+
   private String titulo;
   private String[] opciones;
   private int numOpciones;
-  
+
   public Menu(String titulo, String[] opciones) {
-    setNumOpciones(opciones.length+1);
+    setNumOpciones(opciones.length + 1);
     setTitulo(titulo);
     setOpciones(opciones);
   }
@@ -30,45 +30,42 @@ public class Menu {
     this.opciones = new String[numOpciones];
 
     for (int i = 0; i < numOpciones - 1; i++)
-        this.opciones[i] = (i + 1) + "." + opciones[i];
+      this.opciones[i] = (i + 1) + "." + opciones[i];
   }
-  
+
   private int getNumOpciones() {
     return numOpciones;
   }
-  
+
   private void setNumOpciones(int numOpciones) {
     this.numOpciones = numOpciones;
   }
-  
 
   private boolean opcionValida(int opcion) {
     return (opcion > 0 && opcion <= numOpciones);
-}
+  }
 
-  private int recogerOpcion() throws EnteroNoValidoException {
-    int opcion;
+  private int recogerOpcion() {
+    int opcion = -1;
     do {
       opcion = Teclado.leerEntero("Introduzca una opción: ");
     } while (!opcionValida(opcion));
-      return opcion;
+    return opcion;
   }
 
-  public int gestionMenu() throws EnteroNoValidoException {
-      System.out.println(this);
-      return recogerOpcion();
+  public int gestionMenu() {
+    System.out.println(this);
+    return recogerOpcion();
   }
 
   @Override
   public String toString() {
     String cadena = "";
     cadena += titulo;
-    for (int i = 0; i < numOpciones-1; i++) {
-        cadena += "\n"+opciones[i];
+    for (int i = 0; i < numOpciones - 1; i++) {
+      cadena += "\n" + opciones[i];
     }
     return cadena;
   }
-  
-  
 
 }

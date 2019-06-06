@@ -42,7 +42,12 @@ public class Producto{
     }
 
   public Producto(int c) {
+    setCodigo(c);
+  }
+
+  private void setCodigo(int c) {
     this.codigo = c;
+    
   }
 
   // Getters
@@ -125,8 +130,8 @@ public class Producto{
   private void setPrecioCompra( double pc )throws PrecioDeCompraNegativoException{
     if( pc < 0 ){
       throw new PrecioDeCompraNegativoException("ERROR: El precio de compra no puede ser negativo");
-    }else
-      this.precioCompra = pc;
+    }
+    this.precioCompra = pc;
     }
   
   /**
@@ -138,9 +143,9 @@ public class Producto{
   private void setPrecioVenta( double pv ) throws PrecioDeVentaNegativoException{
     if( pv < 0 ){
       throw new PrecioDeVentaNegativoException("ERROR: El precio de venta no puede ser negativo.");
-    }else
-      this.precioVenta = pv;
     }
+    this.precioVenta = pv;
+  }
   
   /**
    * setter para stock
@@ -151,9 +156,9 @@ public class Producto{
   private void setStock( int s ) throws StockNegativoException{
     if( s < 0 ){
       throw new StockNegativoException("ERROR: El stock no puede ser negativo");
-    }else
-      this.stock = s; 
     }
+    this.stock = s; 
+  }
   
   /**
    * setter para el tipo de IVA
@@ -162,9 +167,9 @@ public class Producto{
   private void setTipoDeIva(Iva iva) throws IvaInvalidoException {
     if(iva == null) {
       throw new IvaInvalidoException("ERROR: El tipo de iva no es válido.");
-    }else {
-      this.tipoDeIva = iva;
     }
+    this.tipoDeIva = iva;
+
     
   }
   
@@ -178,7 +183,7 @@ public class Producto{
     setStock(getStock()-cantidad);
   }
   
-  void modificarProducto(String d, double pC, double pV, int s, Iva iva) throws IvaInvalidoException, StockNegativoException, PrecioDeCompraNegativoException, PrecioDeVentaNegativoException {
+  void set(String d, double pC, double pV, int s, Iva iva) throws IvaInvalidoException, StockNegativoException, PrecioDeCompraNegativoException, PrecioDeVentaNegativoException {
     setDescripcion(d);
     setPrecioCompra(pC);
     setPrecioVenta(pV);
