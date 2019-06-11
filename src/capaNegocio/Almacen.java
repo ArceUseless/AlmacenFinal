@@ -43,10 +43,9 @@ public class Almacen{
     if( cantidad < 0){
       throw new ArgumentoNegativoException("ERROR: La cantidad debe ser positiva.");
     }
-    
-    get(codigo).incrementarStock(cantidad);
-    
+    get(codigo).incrementarStock(cantidad); 
   }
+  
 /**
  * 
  * @param codigo
@@ -60,6 +59,7 @@ public class Almacen{
         throw new ProductoNoEncontradoException("ERROR: No se ha encontrado el producto");   
     }
   }
+  
   /**
    * Decrementa el stock del producto
    * @param c Cantidad que se resta al stock

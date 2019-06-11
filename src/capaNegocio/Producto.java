@@ -50,7 +50,6 @@ public class Producto{
     
   }
 
-  // Getters
   /**
    * getter para codigo
    * @return int
@@ -104,7 +103,6 @@ public class Producto{
     return this.tipoDeIva;
   }
   
-  //Setters
   /**
    * setter para codigo
    * @see getCodigo
